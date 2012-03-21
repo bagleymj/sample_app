@@ -89,6 +89,19 @@ describe UsersController do
   end
 
   describe "GET 'new'" do
+
+    describe "for signed-in users" do
+      before(:each) do
+        @user = Factory(:user)
+        test_sign_in(@user)
+      end
+
+      it "should deny access" do
+        get :new
+        response.should redirect_to(root_path)
+      end
+    end
+
     it "should be successful" do
       get :new
       response.should be_success
@@ -121,6 +134,18 @@ describe UsersController do
   end
 
   describe "POST 'create'" do
+     describe "for signed-in users" do
+       before(:each) do
+         @user = Factory(:user)
+         test_sign_in(@user)
+         @attr = {:name => "New User", :email => "user@example.com", :password => "foobar", :password_confirmation => "foobar"}
+       end
+
+       it "should deny access" do
+        post :create, :user => @attr
+        response.should redirect_to(root_path)
+       end
+     end
 
     describe "failure" do
 
@@ -150,6 +175,7 @@ describe UsersController do
      before(:each) do
       @attr = { :name => "New User", :email => "user@example.com",:password => "foobar", :password_confirmation => "foobar" }
      end
+
 
      it "should create a user" do
       lambda do
