@@ -52,6 +52,8 @@ describe UsersController do
         response.should have_selector("a", :href => "/users?escape=false&page=2",
                                       :content => "Next")
       end
+
+      it "should have a delete link for admins" 
     end
   end
 
