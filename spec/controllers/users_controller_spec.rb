@@ -53,7 +53,24 @@ describe UsersController do
                                       :content => "Next")
       end
 
-      it "should have a delete link for admins" 
+      describe "for non-admins" do
+        it "should not have a delete link" do
+          get :index
+          response.should_not have_selector("a", :content => "delete")
+        end
+      end
+
+      describe "for admins" do
+        before(:each) do
+          admin = Factory(:user, :email => "administration@example.com", :admin => true)
+          test_sign_in(admin)
+        end
+        
+        it "should have a delete link" do
+          get :index
+          response.should have_selector("a", :content => "delete")
+        end
+      end
     end
   end
 
